@@ -1,5 +1,5 @@
 # Importando flask
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 #Carregando o flask em uma variável
 #Declarando variavel no python
@@ -21,6 +21,21 @@ def games():
 @app.route('/consoles')
 def consoles():
     return render_template('consoles.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Simples formulário de login. Em POST valida um par hard-coded e retorna uma mensagem."""
+    message = ''
+    if request.method == 'POST':
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+        # validação simples hard-coded (exemplo)
+        if username == 'admin' and password == 'secret':
+            message = f'Bem-vindo, {username}!'
+        else:
+            message = 'Usuário ou senha inválidos.'
+    return render_template('login.html', message=message)
 
 #Iniciando o servidor web
 if __name__ == '__main__':
