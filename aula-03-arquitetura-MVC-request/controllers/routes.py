@@ -1,10 +1,10 @@
 #motor para renderizar as paginas
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 
 #criando função para receber o flask(app)
 def init_app(app):
     #as rotas virao a partir daqui
-        
+    listaGames = [{"titulo": "CS2", "ano" : 2022, "categoria" : "Aventura"}]    
     #criando uma rota para a página inicial
     @app.route('/')
     #def cria funções em python
@@ -57,3 +57,12 @@ def init_app(app):
             else:
                 message = 'Usuário ou senha inválidos.'
         return render_template('login.html', message=message)
+    
+    
+    @app.route('/cadgames', methods=['GET', 'POST'])
+    def cadgames():
+        if request.method == 'POST':
+            listaGames.append({'titulo' : request.form.get('titulo'), 'ano' : request.form.get('ano'), 'categoria' : request.form.get('categoria')})
+            return redirect(url_for('cadgames'))
+        return render_template('cadgames.html',
+                               listaGames = listaGames)
