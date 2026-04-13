@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+  <h1>Consoles em destaque</h1>
+
+  <ul>
+    <li>Marca: {{ marca }}</li>
+    <li>Lançamento: {{ lançamento }}</li>
+    <li>Nome: {{ nome }}</li>
+  </ul>
+
+  <p>O console {{ nome }} tem {{ 2026 - lançamento }} ano(s).</p>
+
+  <h3>Top consoles da atualidade - Ranking</h3>
+  <ul>
+    {% for console in consoles %}
+      <li>{{ console }}</li>
+    {% endfor %}
+  </ul>
+
+  <hr />
+</main>
+{% endblock content %}
