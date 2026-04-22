@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main>
+    <h1>Bem-vindo ao meu site!</h1>
+    <p>Seu portal para o mundo dos jogos!</p>
+    <h2>Roses are red, violets are blue</h2>
+    <h3>Unspected "};" on line 32</h3>
+    <!-- <hr>
+    <p><a href="/games">games</a></p>
+    <p><a href="/consoles">console</a></p>
+    <hr>   -->
+    <img src="{{url_for('static', filename='imgs/games.webp')}}" alt="Imagem de jogos" width="720px">
+</main>
+
+{% endblock content %}
