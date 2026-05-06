@@ -1,34 +1,33 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 <main>
-    <h1>Jogos mais aclamados.</h1>
-    <hr>
-    <url>
-        <li>Título: {{titulo}}</li>
-        <li>Ano: {{ano}}</li>
-        <li>Categoria: {{categoria}}</li>
-    </url>
+  <h1>Jogos em destaque</h1>
+  <hr />
 
-    <p>O jogo {{titulo}} tem {{2026 - ano}} anos.</p>
+  <ul>
+  <li>Título: {{ game.titulo }}</li>
+  <li>Categoria: {{ game.categoria }}</li>
+  <li>Ano: {{ game.ano }}</li>
+</ul>
 
+<p>O jogo {{ game.titulo }} tem {{ 2026 - game.ano }} ano(s).</p>
 
-    <h3>Top players - Ranking</h3>
-    <ol>
-        {% for jogador in jogadores %}
-            <li>{{jogador}}</li>
-        {% endfor %}    
-    </ol>
-
-    <h3> Jogo do Ano</h3>
-    <!-- For para exibir objeto -->
-    {% for chave, valor in game.items() %}
-    <details>
-        <summary>{{chave}}</summary>
-        <p>{{valor}}</p>
-    </details>
-
+  <h3>Top players - Ranking</h3>
+  <ul>
+    {% for jogador in jogadores %}
+      <li>{{ jogador }}</li>
     {% endfor %}
-    <a href="/">Desprosseguir</a>"
+  </ul>
+
+  <h3>Jogo do ano</h3>
+  {% for chave, valor in game.items() %}
+    <details>
+      <summary>{{ chave }}</summary>
+      <p>{{ valor }}</p>
+    </details>
+  {% endfor %}
+
+  <hr />
 </main>
-{% endblock content %}
+{% endblock content %}r

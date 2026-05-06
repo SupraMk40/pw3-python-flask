@@ -27,7 +27,7 @@ def init_app(app):
         titulo = "Forza Horizon 6"
         ano = 2026
         categoria = "Corrida"
-        return render_template('games.html',
+        return render_template('games',
                             #enviando as variaveis
                             titulo=titulo,
                             ano=ano,
@@ -39,7 +39,7 @@ def init_app(app):
     @app.route('/consoles')
     def consoles():
         consoles = ['Xbox Series A', 'Xbox Series B', 'Playstation 6', 'Playstation 7', 'Mobile']
-        return render_template('consoles.html', consoles = consoles)
+        return render_template('consoles', consoles = consoles)
 
 
 
@@ -56,4 +56,4 @@ def init_app(app):
                 message = f'Bem-vindo, {username}!'
             else:
                 message = 'Usuário ou senha inválidos.'
-        return render_template('login.html', message=message)
+        return render_template('login', message=message)
