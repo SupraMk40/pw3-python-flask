@@ -97,3 +97,39 @@ def init_app(app):
         games = Game.query.all()
         #redirecionando o usuario para a pagina de estoque
         return render_template('estoque-jogos.html', games=games)
+    
+    @app.route("/estoque-consoles", methods=['GET', 'POST'])
+    #criando um parametro na rota
+    @app.route("/estoque-consoles/delete/<int:id>")
+    def estoque_jogos(id=None):
+        #Verificando se esta sendo enviado o parametro ID para a rota
+        if id:
+            game = Game.query.get(id)#select no banco #deleta o jogo
+            db.session.delete(game)
+            db.session.commit()
+            return redirect(url_for('estoque_jogos'))
+        
+        #Verificando se a requisição é do tipo post
+        if request.method == 'POST':
+            #colentando os dados preenchidos no formulario
+            dados_form = request.form.to_dict()
+            #enviando os dados para o model
+            newGame = Game(
+                dados_form['titulo'],
+                dados_form['ano'],
+                dados_form['categoria'], 
+                dados_form['plataforma'],
+                dados_form['preco'],
+                dados_form['quantidade']
+            )
+            #metodo SQLAlchemy para gravar os dados do banco
+            db.session.add(newGame)
+            #confirmando a operação no banco
+            db.session.commit()
+            return redirect(url_for('estoque_jogos'))
+            
+        #selecionando rodos os jogos do banco
+        #SELECT * FROM GAMES
+        games = Game.query.all()
+        #redirecionando o usuario para a pagina de estoque
+        return render_template('estoque-consoles.html', games=games)
