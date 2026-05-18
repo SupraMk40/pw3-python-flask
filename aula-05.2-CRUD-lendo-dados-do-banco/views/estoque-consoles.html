@@ -3,13 +3,12 @@
 
 <!-- FORMULARIO DE CADASTRO -->
  <details>
-    <summary>Cadrastrar um novo JOgo</summary>
+    <summary>Cadrastrar um novo Cunsoli</summary>
     <div class="col-md-4">
         <form action="{{url_for('estoque_jogos')}}" method="POST">
-            <input type="text" name="titulo" placeholder="Titulo" class="form-control" required>
+            <input type="text" name="nome" placeholder="Nome" class="form-control" required>
+            <input type="text" name="fabricante" placeholder="Fabricante" class="form-control" required>
             <input type="text" name="ano" placeholder="Ano" class="form-control" required>
-            <input type="text" name="categoria" placeholder="Categoria" class="form-control" required>
-            <input type="text" name="plataforma" placeholder="Plataforma" class="form-control" required>
             <input type="number" name="preco" placeholder="Preço" class="form-control" required>
             <input type="number" name="quantidade" placeholder="Quantidade" class="form-control" required>
         <br>
@@ -24,10 +23,9 @@
 <table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
-            <th>Titulo</th>
+            <th>Nome</th>
+            <th>Fabricante</th>
             <th>Ano</th>
-            <th>Categoria</th>
-            <th>Plataforma</th>
             <th>Preço</th>
             <th>Quantidade</th>
             <th colspan="2" style="text-align: center;">Ações</th> 
@@ -36,10 +34,9 @@
     <tbody>
         {% for game in games%}
         <tr>
-            <td>{{game.titulo}}</td>
+            <td>{{game.nome}}</td>
+            <td>{{game.fabricante}}</td>
             <td>{{game.ano}}</td>
-            <td>{{game.categoria}}</td>
-            <td>{{game.plataforma}}</td>
             <td>{{game.preco}}</td>
             <td>{{game.quantidade}}</td>
             <td>
