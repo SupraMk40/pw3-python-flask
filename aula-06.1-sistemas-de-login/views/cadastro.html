@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Cadrasto di Users</h2>
+        </div>
+        <div class="card-body">
+            <form action="{{url_for('cadastro')}}" method="POST">
+                <label>E-mail</label>
+                <input type="email" name="email" placeholder="Insira seu E-mail" class="form-control">
+                <label>Senha</label>
+                <input type="password" name="senha" placeholder="Insira sua senha" class="form-control">
+                <button type="submit" class="btn btn-danger btn-block">Cadrastar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
