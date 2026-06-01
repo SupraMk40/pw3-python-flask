@@ -1,6 +1,8 @@
 # Importando o render_template
 # Motor para renderizar as páginas
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
+# Importando o Markup Safe, que permite voce adicionar links na flash message
+from markupsafe import Markup
 from models.database import Game, Console, db, Usuario
 # Criando a função para receber o Flask (app)
 from werkzeug.security import generate_password_hash
@@ -156,14 +158,23 @@ def init_app(app):
             email = request.form['email']
             senha = request.form['senha']
             
+            usuario = Usuario.query.filter_by(email=email).first()
+            if usuario:
+                msg = Markup("Usuário já cadastrado, ta de brincadeira comigo mano? Aqui é pra fazer <a href='/login'>login</a>...")
+                flash(msg, 'danger')
+                return redirect(url_for('cadastro'))
+            
             senha_criptografia = generate_password_hash(senha, method='scrypt')
             
             novo_usuario = Usuario(email=email, senha=senha_criptografia)
             db.session.add(novo_usuario)
             db.session.commit()
-            return redirect(url_for('login'))
+            msgCad = Markup("Cadastro realizado com sucesso! faça o <a href='/login'>login</a>")
+            flash(msgCad, 'success')
+            
+            return redirect(url_for('cadastro'))
         return render_template('cadastro.html')
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        return "Roses are red, violets are blue Unspected }; on line 32"
+        return render_template('login.html')

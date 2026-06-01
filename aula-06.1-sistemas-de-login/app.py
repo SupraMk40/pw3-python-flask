@@ -19,6 +19,8 @@ app.config['thegames'] = thegames
 # Passando o endereço do banco para o Flask-SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{thegames}'
 
+app.config['SECRET_KEY'] = 'abemospapa'
+
 # Enviando a variável APP (FLASK) para as rotas.
 routes.init_app(app)
 
