@@ -21,6 +21,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{thegames}'
 
 app.config['SECRET_KEY'] = 'abemospapa'
 
+# DEFININDO O TEMPO DA SESSÃO
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600 # 1 hora
+
 # Enviando a variável APP (FLASK) para as rotas.
 routes.init_app(app)
 

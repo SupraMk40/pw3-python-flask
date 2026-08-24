@@ -1,17 +1,24 @@
 # Importando o render_template
 # Motor para renderizar as páginas
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, session, flash
 # Importando o Markup Safe, que permite voce adicionar links na flash message
 from markupsafe import Markup
 from models.database import Game, Console, db, Usuario
 # Criando a função para receber o Flask (app)
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 #Importando URLLIB
 import urllib.request #Permite enviar requisições para uma url
 #Importando JSON
 import json #Converte dados de dicionario para JSON
 
 def init_app(app):
+    @app.before_request
+    def check_auth():
+        rotaspermitidas = ['home', 'login', 'cadastro', 'static']
+        if request.endpoint in rotaspermitidas:
+            return
+        if 'usuario_id' not in session:
+            return redirect(url_for('login'))
     # SIMULANDO UM BANCO DE DADOS
     listaGames = [{"titulo": "CS-GO", "ano": 2012, "categoria": "FPS Online"}]
 
@@ -180,7 +187,38 @@ def init_app(app):
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        # VERIFICANDO SE O MÉTODO É POST
+        if request.method == 'POST':
+            # COLETANDO OS DADOS DO USUÁRIO
+            email = request.form['email']
+            senha = request.form['senha']
+            # BUSCANDO O USUÁRIO NO BANCO
+            usuario = Usuario.query.filter_by(email=email).first()
+            # SE O USUARIO EXISTIR
+            if usuario:
+                # VERIFICANDO A SENHA (hash)
+                if check_password_hash(usuario.senha, senha):
+                    # AQUI SERÁ CRIADO A SESSÃO
+                    session['usuario_id'] = usuario.id
+                    session['usuario_email'] = usuario.email
+                    # Mensagem de Feedback
+                    msgLogin = "Você foi autenticado com sucesso! Bem-vindo!"
+                    flash(msgLogin, 'success')
+                    return redirect(url_for('home')) 
+                # CASO SENHA INCORRETA          
+                else:
+                    flash('Falha no login. Verifique os dados e tente novamente!', 'danger')
+                    return redirect(url_for('login'))
+            # SE O USUÁRIO NÃO FOR ENCONTRADO
+            else:
+                flash('O usuário informado não existe!', 'danger')
+                return redirect(url_for('login'))                
         return render_template('login.html')
+    
+    @app.route('/logout', methods=['GET', 'POST'])
+    def logout():
+        session.clear()
+        return redirect(url_for('home'))
     
     #Rota de consumo da API
     @app.route('/apigames', methods=['GET', 'POST'])
