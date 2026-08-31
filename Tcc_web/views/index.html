@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Ocorrências</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <img src="../static/imgs/thegames_logo.png" alt="Logo" width="250px">
+</header>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand">
+            <i class="fas fa-shield-alt me-1"></i>Ocorrências
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarOcorrencias">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarOcorrencias">
+            <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" id="navDashboard">
+                        <i class="fas fa-home me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ocorrencias.html" id="navOcorrencias">
+                        <i class="fas fa-list me-1"></i>Ocorrências
+                    </a>
+                </li>
+            </ul> -->
+            <span class="navbar-text text-muted">
+                <i class="fas fa-clock me-1"></i>
+                <span id="relogio"></span>
+            </span>
+        </div>
+    </div>
+</nav>
+
+<script>
+    setInterval(function(){
+        var el = document.getElementById('relogio');
+        if(el) el.textContent = new Date().toLocaleString('pt-BR');
+    }, 1000);
+    // Active nav highlight
+    var _page = window.location.pathname.split('/').pop() || 'index.html';
+    if (_page === 'index.html' || _page === '') { var nd = document.getElementById('navDashboard'); if(nd) nd.classList.add('active'); }
+    else if (_page === 'ocorrencias.html') { var no = document.getElementById('navOcorrencias'); if(no) no.classList.add('active'); }
+</script>
+
+<!-- Dashboard Principal -->
+<main>
+    <h1><i class="fas fa-chart-line me-2"></i>Dashboard de Ocorrências</h1>
+    <hr>
+
+    <!-- CARDS DE RESUMO -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card card-resumo card-total shadow-sm">
+                <div class="card-body text-center">
+                    <div class="resumo-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <h2 id="totalOcorrencias">-</h2>
+                    <p class="text-muted mb-0">Total de Ocorrências</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-resumo card-andamento shadow-sm">
+                <div class="card-body text-center">
+                    <div class="resumo-icon"><i class="fas fa-spinner"></i></div>
+                    <h2 id="totalAndamento">-</h2>
+                    <p class="text-muted mb-0">Em Andamento</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-resumo card-solucao shadow-sm">
+                <div class="card-body text-center">
+                    <div class="resumo-icon"><i class="fas fa-check-circle"></i></div>
+                    <h2 id="totalSolucionadas">-</h2>
+                    <p class="text-muted mb-0">Solucionadas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold"><i class="fas fa-search me-1"></i>Buscar</label>
+                    <input type="text" id="busca" class="form-control" placeholder="Protocolo, bairro, descrição...">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold"><i class="fas fa-filter me-1"></i>Status</label>
+                    <select id="filtroStatus" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="Em andamento">Em andamento</option>
+                        <option value="Solucionada">Solucionada</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold"><i class="fas fa-tag me-1"></i>Tipo</label>
+                    <select id="filtroTipo" class="form-select"><option value="">Todos</option></select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold"><i class="fas fa-map-marker-alt me-1"></i>Bairro</label>
+                    <select id="filtroBairro" class="form-select"><option value="">Todos</option></select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold"><i class="fas fa-calendar me-1"></i>Período</label>
+                    <div class="input-group">
+                        <input type="date" id="dataInicio" class="form-control">
+                        <span class="input-group-text">até</span>
+                        <input type="date" id="dataFim" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 d-flex gap-2">
+                    <button id="btnFiltrar" class="btn btn-primary"><i class="fas fa-search me-1"></i>Filtrar</button>
+                    <button id="btnLimpar" class="btn btn-outline-secondary"><i class="fas fa-times me-1"></i>Limpar</button>
+                    <span id="contadorResultados" class="ms-auto align-self-center text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABELA DE OCORRÊNCIAS -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Ocorrências</h5>
+            <a href="ocorrencias.html" class="btn btn-sm btn-outline-light"><i class="fas fa-expand me-1"></i>Ver todas</a>
+        </div>
+        <div class="card-body p-0">
+            <!-- Loading -->
+            <div id="loading" class="text-center py-5">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2 text-muted">Carregando ocorrências...</p>
+            </div>
+            <!-- Erro -->
+            <div id="erroMsg" class="alert alert-danger m-4 d-none">
+                <i class="fas fa-exclamation-triangle me-2"></i><span id="erroTexto"></span>
+            </div>
+            <!-- Sem dados -->
+            <div id="semDados" class="text-center py-5 d-none">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Nenhuma ocorrência encontrada</h5>
+                <p class="text-muted">Tente ajustar os filtros de busca.</p>
+            </div>
+            <!-- Tabela -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="tabelaOcorrencias" style="display:none;">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Protocolo</th>
+                            <th>Tipo</th>
+                            <th>Bairro</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO SIMPLES POR TIPO -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Ocorrências por Tipo</h5>
+        </div>
+        <div class="card-body">
+            <div id="graficoTipos" class="text-center text-muted">Carregando...</div>
+        </div>
+    </div>
+</main>
+
+<!-- MODAL DE DETALHES -->
+<div class="modal fade" id="modalDetalhe" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Detalhes da Ocorrência</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="corpoModal">
+                <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i>Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE IMAGEM -->
+<div class="modal fade" id="modalImagem" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white"><i class="fas fa-image me-2"></i>Imagem</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center p-0">
+                <img id="imgAmpliada" src="" class="img-fluid" alt="Imagem">
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <hr>
+    <p style="text-align: center;">&copy; 2026 - Painel de Ocorrências - Todos os direitos reservados.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/dashboard.js"></script>
+</body>
+</html>

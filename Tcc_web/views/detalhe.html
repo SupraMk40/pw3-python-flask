@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhe da Ocorrência</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <img src="../static/imgs/thegames_logo.png" alt="Logo" width="250px">
+</header>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+            <i class="fas fa-shield-alt me-1"></i>Ocorrências
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarOcorrencias">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarOcorrencias">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" id="navDashboard">
+                        <i class="fas fa-home me-1"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="ocorrencias.html" id="navOcorrencias">
+                        <i class="fas fa-list me-1"></i>Ocorrências
+                    </a>
+                </li>
+            </ul>
+            <span class="navbar-text text-muted">
+                <i class="fas fa-clock me-1"></i>
+                <span id="relogio"></span>
+            </span>
+        </div>
+    </div>
+</nav>
+
+<script>
+    setInterval(function(){
+        var el = document.getElementById('relogio');
+        if(el) el.textContent = new Date().toLocaleString('pt-BR');
+    }, 1000);
+</script>
+
+<!-- Detalhes da Ocorrência -->
+<main>
+    <a href="index.html" class="btn btn-outline-dark mb-3">
+        <i class="fas fa-arrow-left me-1"></i>Voltar ao Dashboard
+    </a>
+
+    <!-- Loading -->
+    <div id="loadingDetalhe" class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+        <p class="mt-2 text-muted">Carregando detalhes...</p>
+    </div>
+
+    <!-- Erro -->
+    <div id="erroDetalhe" class="alert alert-danger d-none">
+        <i class="fas fa-exclamation-triangle me-2"></i><span id="erroDetalheTexto"></span>
+    </div>
+
+    <!-- Conteúdo -->
+    <div id="conteudoDetalhe" class="d-none">
+        <!-- Cabeçalho -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="mb-1" id="detProtocolo"></h3>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-map-marker-alt me-1"></i><span id="detBairroCab"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                        <span id="detStatusBadge" class="badge fs-6"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Informações -->
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informações</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless mb-0">
+                            <tr><td class="text-muted fw-bold" style="width:40%">Protocolo</td><td id="detProtocoloInfo">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Tipo</td><td id="detCategoria">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Bairro</td><td id="detBairroInfo">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Data da Ocorrência</td><td id="detData">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Data de Criação</td><td id="detDataCriacao">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Status</td><td id="detStatusInfo">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Anônimo</td><td id="detAnonimo">-</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Denunciante -->
+            <div class="col-md-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-user me-2"></i>Denunciante</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-borderless mb-0">
+                            <tr><td class="text-muted fw-bold" style="width:40%">Nome</td><td id="detNomeUsuario">-</td></tr>
+                            <tr><td class="text-muted fw-bold">Telefone</td><td id="detTelefone">-</td></tr>
+                            <tr><td class="text-muted fw-bold">E-mail</td><td id="detEmail">-</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Descrição -->
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-align-left me-2"></i>Descrição / Informações Adicionais</h6>
+                    </div>
+                    <div class="card-body">
+                        <p id="detDescricao" class="mb-0">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mídia -->
+            <div class="col-12" id="secaoMidia" style="display:none;">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0"><i class="fas fa-camera me-2"></i>Mídia</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="galeriaMidia"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- MODAL DE IMAGEM -->
+<div class="modal fade" id="modalImagem" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white"><i class="fas fa-image me-2"></i>Imagem</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center p-0">
+                <img id="imgAmpliada" src="" class="img-fluid" alt="Imagem">
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <hr>
+    <p style="text-align: center;">&copy; 2026 - Painel de Ocorrências - Todos os direitos reservados.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../static/js/dashboard.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        var params = new URLSearchParams(window.location.search);
+        var id = parseInt(params.get('id'), 10);
+        if (id > 0) {
+            carregarDetalhe(id);
+        } else {
+            document.getElementById('loadingDetalhe').classList.add('d-none');
+            document.getElementById('erroDetalhe').classList.remove('d-none');
+            document.getElementById('erroDetalheTexto').textContent = 'ID da ocorrência não informado na URL.';
+        }
+    });
+</script>
+</body>
+</html>
