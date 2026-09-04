@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- ========== FORMULÁRIO ========== -->
+<div class="container" style="background-color: aliceblue; border-radius: 8px; margin-bottom: 20px; padding: 20px;">
+    <div class="row">
+        <div class="col-12">
+            <h4>Comparar moedas</h4>
+            <p>Escolha a moeda base, as moedas para comparar e a quantidade desejada.</p>
+        </div>
+    </div>
+    
+    <form id="form-moedas" method="get" action="{{ url_for('apimoedas') }}" class="row g-3 align-items-end">
+        <div class="col-12 col-md-4 col-lg-3">
+            <label for="moeda-base" class="form-label">Moeda base</label>
+            <select id="moeda-base" name="base" class="form-select">
+                {% for moeda in moedas %}
+                <option value="{{ moeda.codigo }}" 
+                    {% if base_selecionada == moeda.codigo %}selected{% endif %}>
+                    {{ moeda.codigo }} — {{ moeda.nome }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 col-md-5 col-lg-4">
+            <label for="moedas-comparacao" class="form-label">Comparar com</label>
+            <select id="moedas-comparacao" name="quotes" class="form-select">
+                {% for moeda in moedas %}
+                <option value="{{ moeda.codigo }}"
+                    {% if quote_selecionada == moeda.codigo %}selected{% endif %}>
+                    {{ moeda.codigo }} — {{ moeda.nome }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+            <label for="valor" class="form-label">Quantidade</label>
+            <input type="number" id="valor" name="amount" class="form-control" 
+                   value="{{ amount_valor or '1' }}" min="0" step="any" inputmode="decimal">
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+            <button type="submit" class="btn btn-dark w-100">Comparar</button>
+        </div>
+    </form>
+</div>
+
+<!-- ========== RESULTADO (aparece só quando houver) ========== -->
+{% if resultado %}
+<div class="container" style="background-color:#f0f0f0; border-radius: 8px; padding: 20px;">
+    <div class="row mt-3">
+        <div class="col-md-8 m-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Comparação de moedas</h3>
+                    <p class="h5 mb-1">{{ resultado.base }} — {{ resultado.base_nome }}</p>
+                    <p class="text-muted">Cotação atualizada em: {{ resultado.data }}</p>
+
+                    {% for comp in resultado.comparacoes %}
+                    <div class="border-top pt-2 mt-2">
+                        <h5>{{ resultado.base }} → {{ comp.codigo }}</h5>
+                        <p class="mb-1">1 {{ resultado.base }} = {{ comp.taxa_formatada }} {{ comp.codigo }}</p>
+                        {% if comp.convertido %}
+                        <p class="mb-0">{{ comp.valor_formatado }} = {{ comp.convertido }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elif erro %}
+<div class="container" style="background-color:#f0f0f0; border-radius: 8px; padding: 20px;">
+    <div class="row mt-3">
+        <div class="col-md-8 m-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Comparação de moedas</h3>
+                    <div class="alert alert-danger mb-0">{{ erro }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}
