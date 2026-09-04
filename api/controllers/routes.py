@@ -14,8 +14,6 @@ def init_app(app):
         try:
             urlAPI = f'{URL_FRANKFURTER}/currencies'
             req = urllib.request.Request(
-                urlAPI,
-                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
             )
             resposta = urllib.request.urlopen(req)
             dados = json.loads(resposta.read())
@@ -72,9 +70,6 @@ def init_app(app):
                     resposta = urllib.request.urlopen(req)
                     dados_cotacao = json.loads(resposta.read())
 
-                    # A v2 retorna um ARRAY de objetos:
-                    # [{"date": "...", "base": "USD", "quote": "BRL", "rate": 5.12}, ...]
-                    
                     comparacoes = []
                     for item in dados_cotacao:
                         codigo = item['quote']
